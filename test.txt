@@ -1,0 +1,17 @@
+https://api.nal.usda.gov/fdc/v1/foods/search?query=856579002927&pageSize=10&api_key=DEMO_KEY
+ 
+gets information from fdc. using query=(barcode)
+
+
+for barcode reader also add option to just drop an image.
+
+
+process
+1. get upc/gtin from barcode reader
+2. get needed information with curl
+3. sort this information n stuff
+
+required packages
+1. conda install opencv-python
+2. conda install pyzbar
+3. conda install requests
