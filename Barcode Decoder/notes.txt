@@ -15,3 +15,8 @@ required packages
 1. conda install opencv-python
 2. conda install pyzbar
 3. conda install requests
+
+
+codes
+0016000124790  works for honey nut cereal
+052603041843 works for tomato soup
