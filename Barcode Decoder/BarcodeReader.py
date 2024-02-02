@@ -4,8 +4,7 @@ from pyzbar.pyzbar import decode
   
  
 def BarcodeReader(image):
-    img = cv2.imread(image)    
-    detectedBarcodes = decode(img)    
+    detectedBarcodes = image 
     # If not detected then print the message
     if not detectedBarcodes:
         print("Barcode Not Detected")
@@ -46,7 +45,7 @@ def BarcodeScanner():
             print("Can't receive frame (stream end?). Exiting ...")
             break
         if BarcodeReader(ret)!=0:
-            break
+            return BarcodeReader(ret)
         # Our operations on the frame come here
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Display the resulting frame

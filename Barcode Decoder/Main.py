@@ -1,10 +1,10 @@
 import requests
-from BarcodeReader import BarcodeReader, getImage
+from BarcodeReader import BarcodeReader, getImage, BarcodeScanner
 
 def main():
     apiKey="WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt"
     image="IMG_4313.JPG"
-    gtin=str(BarcodeReader(image)) #casting from bytes to str
+    gtin=str(BarcodeScanner()) #casting from bytes to str
     gtin=gtin[2:len(gtin)-1] #2 or 3?
     while True:   
         if len(gtin)<12:
