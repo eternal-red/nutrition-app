@@ -1,11 +1,12 @@
 import requests
-from BarcodeReader import BarcodeReader
+from BarcodeReader import BarcodeReader, BarcodeVidReader
 
 def get_gtin(image_path):
-    gtin = str(BarcodeReader(image_path), 'utf-8')  # Casting from bytes to str
-    return gtin[2:-1]  # Chop off byte formatting
+    gtin=BarcodeReader(image_path)  
+    return gtin 
 
 def search_food_in_database(gtin, api_key):
+    print(len(gtin), "gtin length")
     while len(gtin) >= 12:
         print(gtin)
         url = f"https://api.nal.usda.gov/fdc/v1/foods/search?query={gtin}&pageSize=10&api_key={api_key}"
@@ -20,13 +21,12 @@ def search_food_in_database(gtin, api_key):
     return False
 
 def main():
-    image_path = "IMG_3960.JPG"
+    #image_path = "IMG_4317.JPG"
     api_key = "WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt"
-    
-    gtin = get_gtin(image_path)
+    gtin = BarcodeVidReader()
+    #gtin=str(gtin, 'utf-8')  # Casting from bytes to str
     print(gtin)
-
-    if len(gtin) < 13:
+    while len(gtin) < 13:
         gtin="0"+gtin
     print(search_food_in_database(gtin, api_key))
 
