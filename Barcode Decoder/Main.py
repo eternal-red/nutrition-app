@@ -1,34 +1,35 @@
 import requests
-from BarcodeReader import BarcodeReader, getImage, BarcodeScanner
+from BarcodeReader import BarcodeReader
+
+def get_gtin(image_path):
+    gtin = str(BarcodeReader(image_path), 'utf-8')  # Casting from bytes to str
+    return gtin[2:-1]  # Chop off byte formatting
+
+def search_food_in_database(gtin, api_key):
+    while len(gtin) >= 12:
+        print(gtin)
+        url = f"https://api.nal.usda.gov/fdc/v1/foods/search?query={gtin}&pageSize=10&api_key={api_key}"
+        print(f"\n-----------\n{url}\n-------------\n")
+        response = requests.get(url)
+        data = response.json()
+        print("\n-----------\n-------------\n")
+        if data["totalHits"]== 1:
+            return data["foods"][0]["description"]
+        gtin = gtin[1:]
+    print("Food not found in the database")
+    return False
 
 def main():
-    apiKey="WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt"
-    image="IMG_4313.JPG"
-    gtin=str(BarcodeScanner()) #casting from bytes to str
-    gtin=gtin[2:len(gtin)-1] #2 or 3?
-    while True:   
-        if len(gtin)<12:
-           print("food not in database")
-           break 
-        print(gtin)
-        url=f"https://api.nal.usda.gov/fdc/v1/foods/search?query={gtin}&pageSize=10&api_key={apiKey}"
-        print("\n-----------",url,"\n-------------\n")
-        #sample link
-        #'''https://api.nal.usda.gov/fdc/v1/foods/search?query=856579002927&pageSize=10&api_key=WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt'''
-        response=requests.get(url)
-        data = response.json()
-        #print(response) 
-        print("\n-----------\n-------------\n")
-        if data["totalHits"]==1:
-            print(data["foods"][0]["description"])
-            break
-        else: 
-            print("error!")
-            gtin=gtin[1:len(gtin)-1]
-     
- 
-#pandas and organizing  stuff blah blah blah
-if __name__ == "__main__":
- main()
+    image_path = "IMG_3960.JPG"
+    api_key = "WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt"
+    
+    gtin = get_gtin(image_path)
+    print(gtin)
 
-  
+    if len(gtin) < 13:
+        gtin="0"+gtin
+    print(search_food_in_database(gtin, api_key))
+
+# pandas and organizing stuff blah blah blah
+if __name__ == "__main__":
+    main()
