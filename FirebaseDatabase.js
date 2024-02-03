@@ -23,10 +23,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
+var allMealLocations = {}
+
 const mealItemColl = collectionGroup(db, "locationFoodItems");
 const allFoodItems = query(mealItemColl, where('b12', '>=', 0));
 const querySnapshot = await getDocs(allFoodItems);
 querySnapshot.forEach((doc) => {
-    foodData = doc.data()
+    //doc.data() returns a dictionary containing the name, location, and nutrition facts of the food
+    //example of potential data:
+    //{iron: 1, zinc: 0.64, calcium: 60, magnesium: 5, b12: 0, vitaminD: 0, name: "Pizza", location:"The Edge"}
+    foodData = doc.data();
+    //foodData[location] would result in a string of the location
+    foodLocation = foodData[location];
     console.log(doc.id, ' => ',foodData);
 });
