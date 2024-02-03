@@ -26,7 +26,7 @@ def BarcodeReader(image):
  
 
 def BarcodeVidReader():
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0) #changes between 1 and 0
     if not cap.isOpened():
         print("Cannot open camera")
         exit()

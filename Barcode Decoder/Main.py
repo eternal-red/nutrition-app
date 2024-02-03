@@ -6,29 +6,34 @@ def get_gtin(image_path):
     gtin=BarcodeReader(image_path)  
     return gtin 
 
-#---get nutrition data---
-def search_food_in_database(gtin, api_key,nutrients):
-    #print(len(gtin), "gtin length")
-    while len(gtin) >= 12:
-        url = f"https://api.nal.usda.gov/fdc/v1/foods/search?query={gtin}&pageSize=10&api_key={api_key}"
-        print(f"\n-----------\n{url}\n-------------\n")
-        response = requests.get(url)
-        data = response.json()
-        print("\n-----------\n-------------\n")
-        if data["totalHits"]== 1:
-            for i in range(len(data["foods"][0]["foodNutrients"])): #getting nutrition information
+def get_nutrients(data,nutrients):
+    for i in range(len(data["foods"][0]["foodNutrients"])): #getting nutrition information
                 nutrient=data["foods"][0]["foodNutrients"][i]["nutrientName"]
                 for j in nutrients.keys():
                     if j==nutrient:
                         nutrients[j]=data["foods"][0]["foodNutrients"][i]["value"]
+    return
                        
+#---get nutrition data---
+def search_food_in_database(gtin, api_key,nutrients):
+
+    #print(len(gtin), "gtin length")
+    while len(gtin) >= 12:
+        url = f"https://api.nal.usda.gov/fdc/v1/foods/search?query={gtin}&pageSize=10&api_key={api_key}"
+        print(f"\n-----------\n{url}\n-------------\n")
+        response = requests.get(url) #get data on product
+        data = response.json()
+        print("\n-----------\n-------------\n")
+        if data["totalHits"]== 1:
+            get_nutrients(data,nutrients)
             return
         gtin = gtin[1:]
     print("Food not found in the database")
     return False
 
 def main():
-    nutrients={ #stores results of nutrients and vitamins
+    #stores results of nutrients and vitamins
+    nutrients={ 
         "Vitamin B-12": 0, 
         "Iron, Fe": 0,
         "Calcium, Ca" : 0,
