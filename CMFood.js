@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, collectionGroup, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, collectionGroup, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+//import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 //import { getDatabase, ref, child, get } from "firebase/database";
 
 //import { getAnalytics, collection, collectionGroup, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
@@ -26,47 +26,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
-const dbRef = ref(getDatabase());
-let diningLocationSnapshot;
-let locationFoodItemsSnapshot;
 
+
+//THE FOLLOWING MIGHT BE FOR A DIFFERENT TYPE OF FIREBASE DATABASE, CHECK LATER
+//const dbRef = ref(getDatabase());
+//let diningLocationSnapshot;
 // Get a snapshot of all dining options within diningLocations from the firebase database
-get(child(dbRef, `diningLocations`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    diningLocationSnapshot = snapshot.val()
-    console.log(snapshot.val());
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
-
-// temporary test
-console.log('Saturday');
-
-
-location = 'BuildPizza'
-// Get a snapshot of food items from a specific location from the firebase database
-get(child(dbRef, `diningLocations/${location}/locationFoodItems`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    locationFoodItemsSnapshot = snapshot.val
-    console.log(snapshot.val());
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
-
-
+//get(child(dbRef, `diningLocations`)).then((snapshot) => {
+//  if (snapshot.exists()) {
+//    diningLocationSnapshot = snapshot.val();
+//    console.log(snapshot.val());
+//  } else {
+//    console.log("No data available");
+//  }
+//}).catch((error) => {
+//  console.error(error);
+//});
+//        let allLocationsArray = ['BuildPizza','CiaoBella', 'ElGallo', 'ForbesAveSubs', 'GranosPizza',
+//        'Hunan', 'Nourish', 'RevolutionNoodle', 'Tahini', 'TepperTaqueria', 'TheExchange',
+//        'TrueBurger', 'Underground', 'UrbanRevolution', 'Wild Blue'];
+//for (let i = 0; i<allLocationsArray.length; i++) {
+//    location = allLocationsArray[i];
+//    // Get a snapshot of food items from a specific location from the firebase database
+//    get(child(dbRef, `diningLocations/${location}/locationFoodItems`)).then((snapshot) => {
+//      if (snapshot.exists()) {
+//        locationFoodItemsSnapshot = snapshot.val;
+//        console.log(snapshot.val());
+//      } else {
+//        console.log("No data available");
+//      }
+//    }).catch((error) => {
+//      console.error(error);
+//    });
+//}
 
 
 // Establish collection group for Dining Places, then collections for food items and their nutrition
 //const diningLocationColl = collection(db, "diningLocations");
-//const mealItemColl = collectionGroup(db, "locationFoodItems");
-
-//This should later extract data from the database
-function findAllMeals() {
-
-}
+const mealItemColl = collectionGroup(db, "locationFoodItems");
+const allFoodItems = query(mealItemColl, where('b12', '>=', 0));
+const querySnapshot = await getDocs(allFoodItems);
+querySnapshot.forEach((doc) => {
+    console.log(doc.id, ' => ', doc.data());
+});
