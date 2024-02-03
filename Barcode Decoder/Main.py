@@ -24,7 +24,10 @@ def main():
     #image_path = "IMG_4317.JPG"
     api_key = "WvJcUpdiej9dX4GGDhFS6ceCzZxmwUg9SetWsqvt"
     gtin = BarcodeVidReader()
-    #gtin=str(gtin, 'utf-8')  # Casting from bytes to str
+    print("entered main")
+    print(gtin)
+    if type(gtin)!=str:
+        gtin=str(gtin, 'utf-8')  # Casting from bytes to str
     print(gtin)
     while len(gtin) < 13:
         gtin="0"+gtin
