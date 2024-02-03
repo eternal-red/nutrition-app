@@ -20,3 +20,14 @@ required packages
 codes
 0016000124790  works for honey nut cereal
 052603041843 works for tomato soup
+
+
+
+ingredients
+"Vitamin B-12"
+iron
+calcium 
+magnesium
+zinc
+
+
